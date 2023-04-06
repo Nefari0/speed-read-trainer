@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 # Why:
 
-I build this project for fun. I remember learning about a technique for learning how to speed read several years ago that displayed only one character at a time for only small periods of time. The eyes and mind work together to reassemble the characters back into words, and words back into sentences. This app attempts to put this theory to the test.
+I built this project for fun. I remember learning about a technique for learning how to speed read several years ago that displayed only one character at a time for only small periods of time. The eyes and mind work together to reassemble the characters back into words, and words back into sentences. This app attempts to put this theory to the test.
 
 # Developement:
 
