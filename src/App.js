@@ -31,7 +31,7 @@ function App() {
   // const timedArray = M.map((el,i) => el=i)
   // ----------------------------------------------------------- //
 
-  const timedArray = readString.split('')
+  const timedArray = readString.split(' ')
   const filteredText = timedArray.filter((item,index) => index === currentItem)
   const mappedText = filteredText.map((el,i) => {return <h2 key={i}>{el}</h2>})
 
@@ -54,6 +54,7 @@ function App() {
   return (
     
     <div className="App">
+      <textarea  />
       <div style={{height:'25px',width:'50px',margin:'auto'}}>
         {isPlaying === false && 
         <button onClick={() => delayControler()}>
