@@ -1,5 +1,5 @@
 import './App.css';
-import { useState,useReducer } from 'react';
+import { useState,useReducer,useEffect } from 'react';
 import { readString, readString2 } from './textString';
 import TextEditor from './lib/TextBox/text-box.component';
 
@@ -21,32 +21,57 @@ function App() {
   
   const [state,setState] = useState({
     currentItem:0,
+    // currentSegment:0,
     delay:200, // Milliseconds
     stateText:readString,
-    splitOption:' '
+    splitOption:' ', // View words or letters
+    wordsPerSegment:3, // Number of words visible at a single time
+    segments:[]
   })
   const {
     currentItem,
     delay,
     stateText,
-    splitOption
+    splitOption,
+    wordsPerSegment,
+    segments,
+    // currentSegment,
+    // timedArray,
   } = state
   // --- These array generators are for building and testing --- //
   // const M = Array.from(Array(20))
   // const timedArray = M.map((el,i) => el=i)
   // ----------------------------------------------------------- //
 
-  const timedArray = stateText.split(splitOption)
-  // if (numOfCharacters === '' || numOfCharacters === ' ') {
+  useEffect(() => {segmentGenerator(stateText)},[])
 
-  // }
-  const filteredText = timedArray.filter((item,index) => index === currentItem)
+  // const timedArray = stateText.split(splitOption)
+  // const timedArraySegment = timedArray.map(el => el = el+wordsPerSegment)
+  const segmentGenerator = (string) => {
+    var array = string.split(splitOption)
+    var slices = []
+    for (var i=0; i<array.length; i+=wordsPerSegment) {
+      slices.push(array.slice(i,i+wordsPerSegment).join(' '));
+    }
+    // console.log('hit segment generator',slices)
+    setState({...state,segments:slices})
+  }
+
+  // --- For displaying single words or single letters --- //
+  const filteredText = segments.filter((item,index) => index === currentItem)
   const mappedText = filteredText.map((el,i) => {return <h2 key={i}>{el}</h2>})
+  // ---------------------------------------------------- //
 
-  // const inputHandler = (e) => {
-  //   const { name,value } = e.target
-  //   setState({...state,[name]:value})
-  // }
+  // --- For displaying multiple words --- //
+  // const filteredSegments = segments.filter((item,index) => index === currentSegment)
+  // const mappedWords = filteredSegments.map((el,i) => {return <h2 key={i}>{el}</h2>})
+  // ------------------------------------- //
+
+  const inputHandler = (e) => {
+    const { name,value } = e.target
+    console.log('input',name)
+    setState({...state,[name]:value})
+  }
 
   const pasteFromClipboard = (e) => {
     e.preventDefault()
@@ -54,10 +79,11 @@ function App() {
       .then(text => {
         try {
           if (typeof(text) === 'string') {
-            setState({
-              ...state,
-              stateText:text
-          })  
+            segmentGenerator(text)
+          //   setState({
+          //     ...state,
+          //     stateText:text
+          // })
         }
                 
       } catch (error) {
@@ -71,11 +97,11 @@ function App() {
 
   const delayControler = async () => {
     dispatch({type:true})
-    timedArray.forEach((el,i) => {
+    segments.forEach((el,i) => {
       
       (function (i) {
         setTimeout(function () {
-          if (i === timedArray.length-1) {
+          if (i === segments.length-1) {
             dispatch({type:false})
           } else {
             setState({...state,currentItem:i})
@@ -89,15 +115,15 @@ function App() {
     
     <div className="App">
 
-      <select
-        name="displaySource"
-        onChange={e => {
-          setState({...state, splitOption: e.target.value})
-        }}
-      >
-        <option value=" ">word</option>
-        <option value="">letter</option>
-      </select>
+      <label>number of words</label>
+      <input 
+        style={{width:'50px'}}
+        name="wordsPerSegment"
+        // placeholder="number of words to display"
+        type='number'
+        value={wordsPerSegment}
+        onChange={inputHandler}
+      />
 
       {/* <TextEditor inputHandler={inputHandler} text={stateText}/> */}
       <button onClick={(e) => pasteFromClipboard(e)}>paste text</button>
