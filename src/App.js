@@ -26,7 +26,8 @@ function App() {
     stateText:readString,
     splitOption:' ', // View words or letters
     wordsPerSegment:3, // Number of words visible at a single time
-    segments:[]
+    segments:[],
+    // isPlaying:false
   })
   const {
     currentItem,
@@ -35,6 +36,7 @@ function App() {
     splitOption,
     wordsPerSegment,
     segments,
+    // isPlaying
     // currentSegment,
     // timedArray,
   } = state
@@ -95,17 +97,31 @@ function App() {
     });
   }
 
+  const stopPlaying = (i) => {
+    console.log('next item',i)
+    
+    clearTimeout(setTimeout(() => {
+      
+    }, i))
+  }
+
   const delayControler = async () => {
-    dispatch({type:true})
-    segments.forEach((el,i) => {
+    await dispatch({type:true})
+    // setState({...state,isPlaying:true})
+    await segments.forEach((el,i) => {
       
       (function (i) {
         setTimeout(function () {
+        
           if (i === segments.length-1) {
             dispatch({type:false})
+            // setState({...state,isPlaying:false})
           } else {
+            // console.log('interval',i)
             setState({...state,currentItem:i})
+            // nextItem(i)
           }
+          
         }, delay * i);
       })(i);
     })
@@ -115,15 +131,14 @@ function App() {
     
     <div className="App">
 
-      <label>number of words</label>
+      {/* <label>number of words</label>
       <input 
         style={{width:'50px'}}
         name="wordsPerSegment"
-        // placeholder="number of words to display"
         type='number'
         value={wordsPerSegment}
         onChange={inputHandler}
-      />
+      /> */}
 
       {/* <TextEditor inputHandler={inputHandler} text={stateText}/> */}
       <button onClick={(e) => pasteFromClipboard(e)}>paste text</button>
@@ -132,6 +147,8 @@ function App() {
         <button onClick={() => delayControler()}>
           start
         </button>}
+
+        <button onClick={() => stopPlaying()}>stop</button>
 
         {/* <button onClick={() => dispatch({type:false})}>
           pause
