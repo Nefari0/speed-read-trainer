@@ -101,9 +101,9 @@ function App() {
 
   // const startPlaying = () => {}
 
-  const delayControler = (playing) => {
+  const delayControler = () => {
     dispatch({type:true})
-    if (playing) {segments.forEach((el,i) => {
+    segments.forEach((el,i) => {
       (function (i) {
         setTimeout(function () {
           if (i === segments.length-1) {
@@ -115,7 +115,7 @@ function App() {
           
         }, delay * i);
       })(i);
-    })}
+    })
   }
 
   return (
