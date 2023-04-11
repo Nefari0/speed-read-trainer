@@ -97,34 +97,25 @@ function App() {
     });
   }
 
-  const stopPlaying = (i) => {
-    console.log('next item',i)
-    
-    clearTimeout(setTimeout(() => {
-      
-    }, i))
-  }
+  // const stopPlaying = (i) => {}
 
-  const delayControler = async () => {
-    await dispatch({type:true})
-    // setState({...state,isPlaying:true})
-    await segments.forEach((el,i) => {
-      
+  // const startPlaying = () => {}
+
+  const delayControler = (playing) => {
+    dispatch({type:true})
+    if (playing) {segments.forEach((el,i) => {
       (function (i) {
         setTimeout(function () {
-        
           if (i === segments.length-1) {
             dispatch({type:false})
-            // setState({...state,isPlaying:false})
           } else {
-            // console.log('interval',i)
+
             setState({...state,currentItem:i})
-            // nextItem(i)
           }
           
         }, delay * i);
       })(i);
-    })
+    })}
   }
 
   return (
@@ -148,7 +139,7 @@ function App() {
           start
         </button>}
 
-        <button onClick={() => stopPlaying()}>stop</button>
+        <button>stop</button>
 
         {/* <button onClick={() => dispatch({type:false})}>
           pause
