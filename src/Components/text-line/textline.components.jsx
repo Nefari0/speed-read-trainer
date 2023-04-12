@@ -1,4 +1,4 @@
-import { useEffect,useReducer } from "react";
+import { useEffect,useReducer, useState } from "react";
 
 const initialState = {
     slice:0,
@@ -8,10 +8,12 @@ const initialState = {
 
 function reducer(state, action) {
     switch (action.type) {
-        case 'count':
-            return {...initialState,slice:action.payload}
         case 'start':
-            return {...initialState,isPlaying:true}
+            return {...initialState,slice:action.slice,isPlaying:action.playing}
+        case 'count':
+            return {...initialState,slice:action.slice}
+        case 'stop':
+            return {...initialState,isPlaying:false}
       default:
         throw new Error();
     }
@@ -23,21 +25,23 @@ const TextLine = ({elements,state,setState}) => {
 
 
     const [reducerState, dispatch] = useReducer(reducer, initialState);
-    const { slice,isPlaying } = reducerState
+    const { slice } = reducerState
+
+    const [isPlaying,setIsPlaying] = useState(false)
 
     const filteredElements = elements.filter((el,i) => i === slice)
     const mappedElements = filteredElements.map((el,i) => {
         return <p key={i}>{el}</p>
     })
 
-    useEffect(() => {timer()},[elements])
+    useEffect(() => {timer()},[elements,isPlaying])
 
     const timer = () => {
 
         if (isPlaying) {
             elements.forEach((el,index) => {
                 setTimeout(function () {
-                    dispatch({type:'count',payload:slice+index})
+                    dispatch({type:'count',slice:slice+index})
                 }, delay * index);
             })
         }
@@ -45,29 +49,35 @@ const TextLine = ({elements,state,setState}) => {
 
     const readActionHander = (i) => {
         if (chunkIndex + i >= 0 && chunkIndex + i < state.chunks.length) {
-            dispatch({type:'count',payload:0})
+            setIsPlaying(true)
+            dispatch({type:'start',slice:0})
             setState({...state,chunkIndex:state.chunkIndex+i})
         }
+        setTimeout(function() {
+            setIsPlaying(false)
+        }, delay * elements.length);
     
     }
     
     return (
         <div>
             {mappedElements}
+
+            {!isPlaying &&
             <div style={{display:'flex',width:'100vw'}}>
-            <button
-                onClick={() => readActionHander(-1)}
-                style={{margin:'auto'}}>
-                prev
-            </button>
-          
-            <button
-                onClick={() => readActionHander(1)}
-                style={{margin:'auto'}}
-            >
-                next
-            </button>
-        </div>
+                <button
+                    onClick={() => readActionHander(-1)}
+                    style={{margin:'auto'}}>
+                    prev
+                </button>
+            
+                <button
+                    onClick={() => readActionHander(1)}
+                    style={{margin:'auto'}}
+                >
+                    next
+                </button>
+            </div>}
         </div>
     )
 }
