@@ -1,15 +1,18 @@
 import './App.css';
 import { useState,useReducer,useEffect } from 'react';
 import { readString, readString2 } from './textString';
-import TextEditor from './lib/TextBox/text-box.component';
 
-const initialState = {isPlaying:false}
+import TextLine from './Components/text-line/textline.components';
+
+const initialState = {
+  chunkIndex:0,
+  segments:[],
+  isPlaying:false,
+}
 function reducer(state, action) {
   switch (action.type) {
-    case true:
-      return {isPlaying:true};
-    case false:
-      return {isPlaying:false};
+    case 'update':
+      return {...initialState,segments:action.payload}
     default:
       throw new Error();
   }
@@ -17,62 +20,51 @@ function reducer(state, action) {
 
 function App() {
   const [reducerState, dispatch] = useReducer(reducer, initialState);
-  const { isPlaying } = reducerState
   
   const [state,setState] = useState({
-    currentItem:0,
-    // currentSegment:0,
-    delay:200, // Milliseconds
+    currentItem:0, // Segment index currently displayed
+    delay:600, // Milliseconds
     stateText:readString,
     splitOption:' ', // View words or letters
     wordsPerSegment:3, // Number of words visible at a single time
-    segments:[],
-    // isPlaying:false
+    chunkSize:5, // Determining how many slice elements are pushed to array.
+    chunks:null,
+    chunkIndex:0,
   })
   const {
-    currentItem,
-    delay,
     stateText,
     splitOption,
     wordsPerSegment,
-    segments,
-    // isPlaying
-    // currentSegment,
-    // timedArray,
+    chunkSize,
+    chunks,
+    chunkIndex,
   } = state
-  // --- These array generators are for building and testing --- //
-  // const M = Array.from(Array(20))
-  // const timedArray = M.map((el,i) => el=i)
-  // ----------------------------------------------------------- //
 
   useEffect(() => {segmentGenerator(stateText)},[])
 
-  // const timedArray = stateText.split(splitOption)
-  // const timedArraySegment = timedArray.map(el => el = el+wordsPerSegment)
   const segmentGenerator = (string) => {
     var array = string.split(splitOption)
+    var chunks = []
+    // --- Number of words displayed at in one instant
     var slices = []
-    for (var i=0; i<array.length; i+=wordsPerSegment) {
-      slices.push(array.slice(i,i+wordsPerSegment).join(' '));
+    var iteration = 0
+
+    if (array.length > 10) {
+      for (var i=0; i<array.length; i+=wordsPerSegment) {
+        slices.push(array.slice(i,i+wordsPerSegment).join(' '));
+        iteration += 1
+        if (iteration === chunkSize) {
+          chunks.push(slices)
+          slices = []
+          iteration = 0
+        }
+        dispatch({type:'update',payload:chunks[0]})
+        setState({
+          ...state,
+          chunks:chunks,
+        })
+      }
     }
-    // console.log('hit segment generator',slices)
-    setState({...state,segments:slices})
-  }
-
-  // --- For displaying single words or single letters --- //
-  const filteredText = segments.filter((item,index) => index === currentItem)
-  const mappedText = filteredText.map((el,i) => {return <h2 key={i}>{el}</h2>})
-  // ---------------------------------------------------- //
-
-  // --- For displaying multiple words --- //
-  // const filteredSegments = segments.filter((item,index) => index === currentSegment)
-  // const mappedWords = filteredSegments.map((el,i) => {return <h2 key={i}>{el}</h2>})
-  // ------------------------------------- //
-
-  const inputHandler = (e) => {
-    const { name,value } = e.target
-    console.log('input',name)
-    setState({...state,[name]:value})
   }
 
   const pasteFromClipboard = (e) => {
@@ -80,14 +72,7 @@ function App() {
       navigator.clipboard.readText()
       .then(text => {
         try {
-          if (typeof(text) === 'string') {
-            segmentGenerator(text)
-          //   setState({
-          //     ...state,
-          //     stateText:text
-          // })
-        }
-                
+          if (typeof(text) === 'string') {segmentGenerator(text)}
       } catch (error) {
           console.log(error)
       }
@@ -97,57 +82,21 @@ function App() {
     });
   }
 
-  // const stopPlaying = (i) => {}
-
-  // const startPlaying = () => {}
-
-  const delayControler = (playing) => {
-    dispatch({type:true})
-    if (playing) {segments.forEach((el,i) => {
-      (function (i) {
-        setTimeout(function () {
-          if (i === segments.length-1) {
-            dispatch({type:false})
-          } else {
-
-            setState({...state,currentItem:i})
-          }
-          
-        }, delay * i);
-      })(i);
-    })}
-  }
-
   return (
     
     <div className="App">
 
-      {/* <label>number of words</label>
-      <input 
-        style={{width:'50px'}}
-        name="wordsPerSegment"
-        type='number'
-        value={wordsPerSegment}
-        onChange={inputHandler}
-      /> */}
-
-      {/* <TextEditor inputHandler={inputHandler} text={stateText}/> */}
       <button onClick={(e) => pasteFromClipboard(e)}>paste text</button>
-      <div style={{height:'25px',width:'50px',margin:'auto'}}>
-        {isPlaying === false && 
-        <button onClick={() => delayControler()}>
-          start
-        </button>}
 
-        <button>stop</button>
-
-        {/* <button onClick={() => dispatch({type:false})}>
-          pause
-        </button> */}
-
-      </div>
-      {/* <button onClick={() => dispatch({type: !isPlaying})}>start2</button> */}
-      {mappedText}
+      {chunks &&
+        
+        <TextLine
+          elements={chunks[chunkIndex]}
+          state={state}
+          setState={setState}
+        />
+      }
+      
     </div>
   );
 }
