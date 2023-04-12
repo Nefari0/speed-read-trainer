@@ -1,8 +1,10 @@
 import './App.css';
 import { useState,useReducer,useEffect } from 'react';
 import { readString, readString2 } from './textString';
+import { BaseButton } from './Components/buttons/button.styles';
 
 import TextLine from './Components/text-line/textline.components';
+import { AppConainer } from './App.styles';
 
 const initialState = {
   chunkIndex:0,
@@ -84,9 +86,10 @@ function App() {
 
   return (
     
-    <div className="App">
+    // <div className="App">
+    <AppConainer>
 
-      <button onClick={(e) => pasteFromClipboard(e)}>paste text</button>
+      <BaseButton onClick={(e) => pasteFromClipboard(e)}>paste text</BaseButton>
 
       {chunks &&
         
@@ -97,7 +100,7 @@ function App() {
         />
       }
       
-    </div>
+    </AppConainer>
   );
 }
 

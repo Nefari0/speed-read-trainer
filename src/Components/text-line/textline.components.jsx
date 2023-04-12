@@ -1,3 +1,10 @@
+import { 
+    TextLineContainer,
+    ButtonPanel,
+    StartButton,
+    StopButton,
+    TextTable
+} from "./textline.styles";
 import { useEffect,useReducer, useState } from "react";
 
 const initialState = {
@@ -60,25 +67,29 @@ const TextLine = ({elements,state,setState}) => {
     }
     
     return (
-        <div>
-            {mappedElements}
+        <TextLineContainer>
+            <TextTable>
+                {mappedElements}
+            </TextTable>
+            {/* </div> */}
 
             {!isPlaying &&
-            <div style={{display:'flex',width:'100vw'}}>
-                <button
+            <ButtonPanel>
+                <StopButton
                     onClick={() => readActionHander(-1)}
-                    style={{margin:'auto'}}>
-                    prev
-                </button>
+                    style={{margin:'auto'}}
+                >
+                    previous
+                </StopButton>
             
-                <button
+                <StartButton
                     onClick={() => readActionHander(1)}
                     style={{margin:'auto'}}
                 >
                     next
-                </button>
-            </div>}
-        </div>
+                </StartButton>
+            </ButtonPanel>}
+        </TextLineContainer>
     )
 }
 
