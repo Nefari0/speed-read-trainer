@@ -17,19 +17,23 @@ export const TextTable = styled.section`
     width:100%;
     display:flex;
     flex-direction:column;
+
+    @media (max-height:425px) {
+        height:25%;
+    }
     
     p {
         font-weight:600;
     }
 `
 
-export const ButtonPanel = styled.div`
+export const ButtonPanel = styled.section`
     position:absolute;
     display:flex;
     flex-direction:column;
     bottom:0px;
     justify-content:space-between;
-    height:110px;
+    height:170px;
     width:100%;
 `
 
