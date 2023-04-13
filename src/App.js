@@ -10,7 +10,7 @@ import {
 } from './textString';
 
 import { BaseButton } from './Components/buttons/button.styles';
-
+import Error from './Components/error/error.component';
 import TextLine from './Components/text-line/textline.components';
 import { AppConainer } from './App.styles';
 
@@ -41,6 +41,7 @@ function App() {
     chunkSize:5, // Determining how many slice elements are pushed to array.
     chunks:null,
     chunkIndex:0,
+    error:null,
   })
   const {
     stateText,
@@ -49,6 +50,7 @@ function App() {
     chunkSize,
     chunks,
     chunkIndex,
+    error,
   } = state
 
   useEffect(() => {segmentGenerator(stateText)},[])
@@ -75,7 +77,7 @@ function App() {
           chunks:chunks,
         })
       }
-    }
+    } else {setState({...state,error:`Can only paste text bodies with more than ${chunkSize*2} words`})}
   }
 
   const pasteFromClipboard = (e) => {
@@ -96,6 +98,8 @@ function App() {
   return (
 
     <AppConainer>
+
+      {error && <Error state={state} setState={setState} />}
 
       <BaseButton onClick={(e) => pasteFromClipboard(e)}>paste text</BaseButton>
 
