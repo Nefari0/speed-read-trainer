@@ -1,6 +1,14 @@
-import './App.css';
-import { useState,useReducer,useEffect } from 'react';
-import { readString, readString2 } from './textString';
+import { 
+  useState,
+  useReducer,
+  useEffect
+ } from 'react';
+
+import { 
+  readString,
+  // readString2
+} from './textString';
+
 import { BaseButton } from './Components/buttons/button.styles';
 
 import TextLine from './Components/text-line/textline.components';
@@ -11,6 +19,7 @@ const initialState = {
   segments:[],
   isPlaying:false,
 }
+
 function reducer(state, action) {
   switch (action.type) {
     case 'update':
@@ -85,8 +94,7 @@ function App() {
   }
 
   return (
-    
-    // <div className="App">
+
     <AppConainer>
 
       <BaseButton onClick={(e) => pasteFromClipboard(e)}>paste text</BaseButton>
@@ -101,6 +109,7 @@ function App() {
       }
       
     </AppConainer>
+
   );
 }
 

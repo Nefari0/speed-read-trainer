@@ -44,8 +44,8 @@ const TextLine = ({elements,state,setState}) => {
 
     useEffect(() => {timer()},[elements,isPlaying])
 
+    // --- This controls word segments displayed on the screen --- //
     const timer = () => {
-
         if (isPlaying) {
             elements.forEach((el,index) => {
                 setTimeout(function () {
@@ -55,6 +55,7 @@ const TextLine = ({elements,state,setState}) => {
         }
     }
 
+    // --- Handles next and previous chunks, disables control panel while playing --- //
     const readActionHander = (i) => {
         if (chunkIndex + i >= 0 && chunkIndex + i < state.chunks.length) {
             setIsPlaying(true)
@@ -72,7 +73,6 @@ const TextLine = ({elements,state,setState}) => {
             <TextTable>
                 {mappedElements}
             </TextTable>
-            {/* </div> */}
 
             {!isPlaying &&
             <ButtonPanel>
