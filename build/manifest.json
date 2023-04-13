@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Speed reader",
+  "name": "Speed read trainer",
   "icons": [
     {
       "src": "favicon.ico",
