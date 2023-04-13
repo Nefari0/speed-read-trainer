@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const AppConainer = styled.main`
     width:500px;
     position:relative;
-    height:650px;
+    height:350px;
     margin:auto;
     display:flex;
     flex-direction:column;
