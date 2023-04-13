@@ -13,6 +13,6 @@ export const AppConainer = styled.main`
     }
 
     @media (max-height:650px) {
-        hwight:98vh;
+        height:98vh;
     }
 `
