@@ -62,7 +62,7 @@ function App() {
     var slices = []
     var iteration = 0
 
-    if (array.length > 10) {
+    if (array.length > chunkSize*4) {
       for (var i=0; i<array.length; i+=wordsPerSegment) {
         slices.push(array.slice(i,i+wordsPerSegment).join(' '));
         iteration += 1
@@ -77,7 +77,7 @@ function App() {
           chunks:chunks,
         })
       }
-    } else {setState({...state,error:`Can only paste text bodies with more than ${chunkSize*2} words`})}
+    } else {setState({...state,error:`Can only paste text bodies with more than ${chunkSize*4} words`})}
   }
 
   const pasteFromClipboard = (e) => {
