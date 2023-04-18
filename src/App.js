@@ -1,8 +1,16 @@
-// import './App.css';
-import { useState,useReducer,useEffect } from 'react';
-import { readString, readString2 } from './textString';
-import { BaseButton } from './Components/buttons/button.styles';
+import { 
+  useState,
+  useReducer,
+  useEffect
+ } from 'react';
 
+import { 
+  readString,
+  // readString2
+} from './textString';
+
+import { BaseButton } from './Components/buttons/button.styles';
+import Error from './Components/error/error.component';
 import TextLine from './Components/text-line/textline.components';
 import { AppConainer } from './App.styles';
 
@@ -11,6 +19,7 @@ const initialState = {
   segments:[],
   isPlaying:false,
 }
+
 function reducer(state, action) {
   switch (action.type) {
     case 'update':
@@ -32,6 +41,7 @@ function App() {
     chunkSize:5, // Determining how many slice elements are pushed to array.
     chunks:null,
     chunkIndex:0,
+    error:null,
   })
   const {
     stateText,
@@ -40,6 +50,7 @@ function App() {
     chunkSize,
     chunks,
     chunkIndex,
+    error,
   } = state
 
   useEffect(() => {segmentGenerator(stateText)},[])
@@ -51,7 +62,7 @@ function App() {
     var slices = []
     var iteration = 0
 
-    if (array.length > 10) {
+    if (array.length > chunkSize*4) {
       for (var i=0; i<array.length; i+=wordsPerSegment) {
         slices.push(array.slice(i,i+wordsPerSegment).join(' '));
         iteration += 1
@@ -66,7 +77,7 @@ function App() {
           chunks:chunks,
         })
       }
-    }
+    } else {setState({...state,error:`Can only paste text bodies with more than ${chunkSize*4} words`})}
   }
 
   const pasteFromClipboard = (e) => {
@@ -85,9 +96,10 @@ function App() {
   }
 
   return (
-    
-    // <div className="App">
+
     <AppConainer>
+
+      {error && <Error state={state} setState={setState} />}
 
       <BaseButton onClick={(e) => pasteFromClipboard(e)}>paste text</BaseButton>
 
@@ -101,6 +113,7 @@ function App() {
       }
       
     </AppConainer>
+
   );
 }
 

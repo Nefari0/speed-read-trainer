@@ -16,3 +16,21 @@ export const AppConainer = styled.main`
         height:98vh;
     }
 `
+
+export const OverLay = styled.section`
+    width:500px;
+    position:absolute;
+    height:350px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:1;
+
+    @media (max-width:500px) {
+        width:98vw;
+    }
+
+    @media (max-height:650px) {
+        height:98vh;
+    }
+`
