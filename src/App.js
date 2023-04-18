@@ -1,4 +1,4 @@
-import './App.css';
+// import './App.css';
 import { useState,useReducer,useEffect } from 'react';
 import { readString, readString2 } from './textString';
 import { BaseButton } from './Components/buttons/button.styles';
