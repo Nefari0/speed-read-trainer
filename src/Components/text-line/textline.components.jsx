@@ -3,7 +3,7 @@ import {
     ButtonPanel,
     StartButton,
     StopButton,
-    TextTable
+    TextTable,
 } from "./textline.styles";
 import SpeedPanel from "./speed-panel.component";
 import { useEffect,useReducer, useState } from "react";
