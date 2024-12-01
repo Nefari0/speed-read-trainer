@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import { 
   useState,
   useReducer,
@@ -53,7 +55,13 @@ function App() {
     error,
   } = state
 
-  useEffect(() => {segmentGenerator(stateText)},[])
+  useEffect(() => {segmentGenerator(stateText)},[]);
+  
+  // const getOnlineText = () => {
+  //   axios.request(options).then( res => {
+  //     this.setState({ posts:res.data });
+  //       });
+  // }
 
   const segmentGenerator = (string) => {
     var array = string.split(splitOption)
