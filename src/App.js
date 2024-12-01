@@ -11,6 +11,8 @@ import {
   // readString2
 } from './textString';
 
+// import { key } from './creds';
+
 import { BaseButton } from './Components/buttons/button.styles';
 import Error from './Components/error/error.component';
 import TextLine from './Components/text-line/textline.components';
@@ -54,6 +56,14 @@ function App() {
     chunkIndex,
     error,
   } = state
+  
+  // const options = {
+  //   method: 'GET',
+  //   url: 'https://api.apyhub.com/extract/text/webpage',
+  //   params: {url: 'https://en.wikipedia.org/wiki/Computer'},
+  //   headers: key
+  // };
+
 
   useEffect(() => {segmentGenerator(stateText)},[]);
   
