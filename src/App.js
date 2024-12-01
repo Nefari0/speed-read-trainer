@@ -11,7 +11,7 @@ import {
   // readString2
 } from './textString';
 
-// import { key } from './creds';
+import { key } from './creds';
 
 import { BaseButton } from './Components/buttons/button.styles';
 import Error from './Components/error/error.component';
@@ -46,6 +46,7 @@ function App() {
     chunks:null,
     chunkIndex:0,
     error:null,
+    endpoint:'https://en.wikipedia.org/wiki/Computer' // default endpoint
   })
   const {
     stateText,
@@ -55,23 +56,24 @@ function App() {
     chunks,
     chunkIndex,
     error,
+    endpoint
   } = state
   
-  // const options = {
-  //   method: 'GET',
-  //   url: 'https://api.apyhub.com/extract/text/webpage',
-  //   params: {url: 'https://en.wikipedia.org/wiki/Computer'},
-  //   headers: key
-  // };
+  const options = {
+    method: 'GET',
+    url: 'https://api.apyhub.com/extract/text/webpage',
+    params: {url: `${endpoint}`},
+    headers: key
+  };
 
 
   useEffect(() => {segmentGenerator(stateText)},[]);
   
-  // const getOnlineText = () => {
-  //   axios.request(options).then( res => {
-  //     this.setState({ posts:res.data });
-  //       });
-  // }
+  const getOnlineText = () => {
+    axios.request(options).then( res => {
+      this.setState({ posts:res.data });
+        });
+  }
 
   const segmentGenerator = (string) => {
     var array = string.split(splitOption)
